@@ -8,9 +8,10 @@ export default function Login({ setUser }) {
 
   const handleLogin = async () => {
     const res = await registerUser(username);
-    setUser(res.data);
+    setUser(res.data);  // This already updates App's state and localStorage
     navigate('/');
-  };
+   };
+
 
   return (
     <div className='h-screen flex items-center justify-center bg-gray-100'>
