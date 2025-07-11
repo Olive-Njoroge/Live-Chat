@@ -13,7 +13,7 @@ const server = http.createServer(app);
 // ✅ Set allowed origins (list ALL your frontend URLs here)
 const allowedOrigins = [
   'http://localhost:5173', 
-  'https://live-chat-frontend-f4yv.onrender.com',
+  'hhttps://live-chat-imcu.vercel.app/',
   'https://live-chat-imcu.vercel.app/'
 ];
 
