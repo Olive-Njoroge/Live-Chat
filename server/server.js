@@ -10,14 +10,12 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-// ✅ Set allowed origins (list ALL your frontend URLs here)
 const allowedOrigins = [
-  'http://localhost:5173', 
-  'hhttps://live-chat-imcu.vercel.app/',
-  'https://live-chat-imcu.vercel.app/'
+  'http://localhost:5173',
+  'https://live-chat-imcu.vercel.app'  // ✅ Correct URL, no typo
 ];
 
-// ✅ Apply Express CORS middleware globally
+// ✅ Apply CORS for Express
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -33,7 +31,7 @@ app.use(cors({
 
 app.use(express.json());
 
-// ✅ Set up Socket.IO CORS
+// ✅ Apply CORS for Socket.IO
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
@@ -44,7 +42,7 @@ const io = new Server(server, {
 
 require('./socket')(io);
 
-// ✅ Routes
+// Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/rooms', require('./routes/roomRoutes'));
 app.use('/api/messages', require('./routes/messageRoutes'));
