@@ -1,34 +1,34 @@
-const connectDB = require('./config/db');
 const express = require('express');
 const dotenv = require('dotenv');
 const http = require('http');
 const cors = require('cors');
 const { Server } = require('socket.io');
+const connectDB = require('./config/db');
 
 dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
 
-// ✅ CORS configuration for Socket.io
-const io = new Server(server, {
-  cors: {
-    origin: 'https://live-chat-lcqd.vercel.app',  // ✅ Replace with your actual Vercel URL
-    methods: ['GET', 'POST'],
-    credentials: true
-  }
-});
+// ✅ Allow only your Render frontend
+const allowedOrigins = ['https://live-chat-frontend-f4yv.onrender.com'];
 
-// ✅ CORS middleware for Express
 app.use(cors({
-  origin: 'https://live-chat-lcqd.vercel.app',     // ✅ Same as above
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
 
 app.use(express.json());
 
-// Socket.io
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ['GET', 'POST'],
+    credentials: true
+  }
+});
+
 require('./socket')(io);
 
 // Routes
@@ -36,11 +36,9 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/rooms', require('./routes/roomRoutes'));
 app.use('/api/messages', require('./routes/messageRoutes'));
 
-// Database & Start
 connectDB();
 
 const PORT = process.env.PORT || 5000;
-
 server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
