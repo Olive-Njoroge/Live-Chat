@@ -1,8 +1,8 @@
 import axios from 'axios';
 import io from 'socket.io-client'
 
-const BackendBaseUrl = "VITE_API_BASE_URL";
-const APIBaseUrl = "VITE_API_BASE_URL/api"
+const BackendBaseUrl = import.meta.env.VITE_API_BASE_URL;
+const APIBaseUrl = `${BackendBaseUrl}/api`;
 
 const API = axios.create({
     baseURL : APIBaseUrl
