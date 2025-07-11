@@ -7,6 +7,8 @@ const APIBaseUrl = `${BackendBaseUrl}/api`;
 const API = axios.create({
     baseURL : APIBaseUrl
 });
+console.log(import.meta.env.VITE_API_BASE_URL);
+
 
 export const registerUser = (username) => {
     return API.post("/auth/register", {username});
