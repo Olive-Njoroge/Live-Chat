@@ -10,22 +10,30 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-// ✅ List of allowed origins (add your frontend URLs here)
+// ✅ Set allowed origins (list ALL your frontend URLs here)
 const allowedOrigins = [
-  'http://localhost:5173',                      // Local dev
-  'https://live-chat-frontend-f4yv.onrender.com', // Render frontend
-  'https://live-chat-c47b.vercel.app/'            // Vercel frontend
+  'http://localhost:5173', 
+  'https://live-chat-frontend-f4yv.onrender.com',
+  'https://live-chat-lcqd.vercel.app'
 ];
 
-// ✅ Express CORS setup
+// ✅ Apply Express CORS middleware globally
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
 
-// ✅ Socket.IO CORS setup
+// ✅ Set up Socket.IO CORS
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
@@ -34,18 +42,15 @@ const io = new Server(server, {
   }
 });
 
-// ✅ Initialize socket handlers
 require('./socket')(io);
 
-// ✅ API Routes
+// ✅ Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/rooms', require('./routes/roomRoutes'));
 app.use('/api/messages', require('./routes/messageRoutes'));
 
-// ✅ Connect to MongoDB
 connectDB();
 
-// ✅ Start Server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
