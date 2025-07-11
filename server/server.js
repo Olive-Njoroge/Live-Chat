@@ -10,9 +10,12 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
+connectDB();
+
+// ✅ Define allowed origins
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://live-chat-imcu.vercel.app'  // ✅ Correct URL, no typo
+  'https://live-chat-imcu.vercel.app'
 ];
 
 // ✅ Apply CORS for Express
@@ -29,7 +32,13 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+// ✅ Parse JSON bodies
 app.use(express.json());
+
+// ✅ Routes
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/rooms', require('./routes/roomRoutes'));
+app.use('/api/messages', require('./routes/messageRoutes'));
 
 // ✅ Apply CORS for Socket.IO
 const io = new Server(server, {
@@ -40,16 +49,11 @@ const io = new Server(server, {
   }
 });
 
+// ✅ Initialize socket events
 require('./socket')(io);
 
-// Routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/rooms', require('./routes/roomRoutes'));
-app.use('/api/messages', require('./routes/messageRoutes'));
-
-connectDB();
-
+// ✅ Start server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`✅ Server running on http://localhost:${PORT}`);
 });
