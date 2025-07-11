@@ -14,7 +14,7 @@ const server = http.createServer(app);
 const allowedOrigins = [
   'http://localhost:5173', 
   'https://live-chat-frontend-f4yv.onrender.com',
-  'https://live-chat-lcqd.vercel.app'
+  'https://live-chat-imcu.vercel.app/'
 ];
 
 // ✅ Apply Express CORS middleware globally
