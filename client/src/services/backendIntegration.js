@@ -1,8 +1,8 @@
 import axios from 'axios';
 import io from 'socket.io-client'
 
-const BackendBaseUrl = "https://live-chat-backend-g3hp.onrender.com";
-const APIBaseUrl = "https://live-chat-backend-g3hp.onrender.com/api"
+const BackendBaseUrl = "https://live-chat-backend-wyp6.onrender.com";
+const APIBaseUrl = "https://live-chat-backend-wyp6.onrender.com/api"
 
 const API = axios.create({
     baseURL : APIBaseUrl
