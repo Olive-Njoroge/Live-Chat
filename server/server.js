@@ -10,22 +10,19 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-// ✅ Allow only your Render frontend
-const allowedOrigins = ['https://live-chat-frontend-f4yv.onrender.com'];
-
+// ✅ CORS for Express (allows any origin)
 app.use(cors({
-  origin: allowedOrigins,
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
 }));
 
 app.use(express.json());
 
+// ✅ CORS for Socket.io (also allows any origin)
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: '*',
     methods: ['GET', 'POST'],
-    credentials: true
   }
 });
 
@@ -36,6 +33,7 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/rooms', require('./routes/roomRoutes'));
 app.use('/api/messages', require('./routes/messageRoutes'));
 
+// Connect to DB & start server
 connectDB();
 
 const PORT = process.env.PORT || 5000;
